@@ -22,7 +22,7 @@ func main() {
     http.HandleFunc("/", chain(routes.HandleRoot, middleware.Logger()))
 
 	//serving static files(css, jsvsscript, img)
-	fs := http.FileServer(http.Dir("views/build/static/"))
+	fs := http.FileServer(http.Dir("build/static/"))
     http.Handle("/static/", http.StripPrefix("/static", fs))
 
 	//API entry points

@@ -5,5 +5,5 @@ import (
 )
 
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "views/build/index.html")
+	http.ServeFile(w, r, "build/index.html")
 }
