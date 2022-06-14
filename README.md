@@ -20,7 +20,7 @@ This is a RESTfull SPA.
 
 ### Screenshot
 
-![](./screenshot.png)
+![](./Screenshot.png)
 
 ### Link
 
