@@ -41,7 +41,7 @@ function Login(prop) {
   return (
     <div className="login-wrapper">
       <h1>Pro Counter Ultra Max</h1>
-      <p className="f">By <a href="https://adrianburgoscolas.github.io/portfolio/">Adrian Burgos</a></p>
+      <p className="f">By <a href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></p>
       <h2>{register ? "Register" : "Please Log In"}</h2>
       <form onSubmit={handleSubmit}>
         <label>
