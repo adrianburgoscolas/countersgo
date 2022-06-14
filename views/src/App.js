@@ -34,7 +34,7 @@ function App() {
 
   if(session.open === "false") {
     if(/user|pass/i.test(session.message)){
-      let alertText = /Error 1062: Duplicate entry 'a' for key 'users.username'/i.test(session.message)?"User already exist!":session.message
+      let alertText = /Error 1062: Duplicate entry '\w+' for key 'users.username'/i.test(session.message)?"User already exist!":session.message
       alert("Error, " + alertText)
     }
     
