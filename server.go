@@ -49,7 +49,9 @@ func main() {
 
 	//Get environment listten port
 	var addr string
-	if port := os.Getenv("PORT"); port == "" {
+	port := os.Getenv("PORT")
+	goEnv := os.Getenv("GO_ENV")
+	if port == "" || goEnv == "development" {
 		addr = ":3001" 
 	} else {
 		addr = ":" + port
