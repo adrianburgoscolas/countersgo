@@ -7,7 +7,7 @@ This is a RESTfull SPA.
 - [Overview](#overview)
   - [Specs](#specs)
   - [Screenshot](#screenshot)
-  - [Links](#links)
+  - [Link](#link)
 - [My process](#my-process)
   - [Built with](#built-with)
 - [Author](#author)
