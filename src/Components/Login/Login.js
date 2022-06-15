@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./Login.css";
 import useToken from "../../CustomHooks/useToken";
 import useRegister from "../../CustomHooks/useRegister";
 
@@ -25,9 +24,10 @@ function Login(prop) {
   }
 
   const repeatPass = (
-    <label>
-      <p>{checkpass === ""?"Repeat Password":pass === checkpass?"Password Ok":"Password are not equal!"}</p>
+    <label className="m-5 mx-auto">
+      <p className="mt-5 mb-2 font-bold">{checkpass === ""?"Repeat Password":pass === checkpass?"Password Ok":"Password are not equal!"}</p>
       <input
+        className="text-center rounded-xl m-auto p-2"
         type="password"
         placeholder="Repeat password"
         value={checkpass}
@@ -39,14 +39,15 @@ function Login(prop) {
   );
 
   return (
-    <div className="login-wrapper">
-      <h1>Pro Counter Ultra Max</h1>
-      <p className="f">By <a href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></p>
-      <h2>{register ? "Register" : "Please Log In"}</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="text-center text-stone-800 py-10 bg-stone-200 min-h-screen">
+      <h1 className="text-3xl font-bold">Pro Counter Ultra Max</h1>
+      
+      <h2 className="text-2xl font-bold">{register ? "Register" : "Please Log In"}</h2>
+      <form className="m-5 p-5" onSubmit={handleSubmit}>
         <label>
-          <p>Username</p>
+          <p className="mb-2 font-bold">Username</p>
           <input
+            className="text-center rounded-xl p-2"
             type="text"
             placeholder="Enter user"
             value={user}
@@ -56,8 +57,9 @@ function Login(prop) {
           />
         </label>
         <label>
-          <p>Password</p>
+          <p className="mt-5 mb-2 font-bold">Password</p>
           <input
+            className="text-center rounded-xl p-2"
             type="password"
             placeholder="Enter password"
             value={pass}
@@ -68,14 +70,15 @@ function Login(prop) {
         </label>
         {register && pass !== "" ? repeatPass : ""}
         <div>
-          <button disabled={register?pass !== checkpass || pass === "":false} type="submit">
+          <button className="bg-sky-600 hover:bg-sky-700 font-bold text-stone-200 p-2 m-5 rounded-xl" disabled={register?pass !== checkpass || pass === "":false} type="submit">
             Submit
           </button>
         </div>
       </form>
-      <div className="register" onClick={() => setRegister((r) => !r)}>
+      <button className="bg-sky-600 hover:bg-sky-700 font-bold text-stone-200 p-2 rounded-xl" onClick={() => setRegister((r) => !r)}>
         {register ? "Login" : "Register"}
-      </div>
+      </button>
+      <footer className="text-xs absolute left-0 right-0 bottom-10">By <a className="text-indigo-700" href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></footer>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes} from "react-router-dom" 
-import "./App.css";
 
 import Dashboard from "./Components/Dashboard/Dashboard"
 import Prefences from "./Components/Preferences/Preferences"
@@ -41,7 +40,7 @@ function App() {
     return <Login setTkn={setSession} />
   }
   return (
-    <div className="App">
+    <div className="text-center">
       <div className="logout" onClick={handleLogout}>Logout</div>
       <h1>
         <div>Pro Counter</div>

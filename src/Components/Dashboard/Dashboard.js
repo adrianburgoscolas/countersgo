@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import useToken from "../../CustomHooks/useToken";
 import Counter from "../Counter/Counter";
-import "./Dashboard.css"
 
 function Dashboard(prop) {
 

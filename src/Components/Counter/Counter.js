@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Counter.css"
 
 function Counter(prop) {
     const [value, setValue] = useState(prop.counterValue);

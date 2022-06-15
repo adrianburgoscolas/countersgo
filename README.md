@@ -31,7 +31,7 @@ This is a RESTfull SPA.
 ### Built with
 
 - React JS
-- CSS custom properties
+- TailwidCSS
 - Go(Golang)
 - SQL
 
