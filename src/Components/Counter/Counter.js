@@ -39,12 +39,12 @@ function Counter(prop) {
     },[delCounterHandler]);
 
     return (
-        <li className={`flex gap-2 mt-2 px-2`}>
-            <div className={"flex-1 text-left px-2 rounded-xl bg-stone-300"}>{name}</div>
-            <form className="flex-none" onChange={e => setCounterHandler(e)}>
+        <li className={`flex mt-2 px-2`}>
+            <div className={"mx-1 flex-1 text-left px-2 rounded-xl bg-stone-300"}>{name}</div>
+            <form className="mx-1 flex-none" onChange={e => setCounterHandler(e)}>
                 <input className="w-20 rounded-xl px-2 text-left" min={0} max={10000} type="number" value={value<=10000?value:10000} onChange={e => setValue(e.currentTarget.value)} ></input>
             </form>
-            <button className="flex-none bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2" onClick={e => setDelCounterHandler(e)}>Del</button>
+            <button className="mx-1 flex-none bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2" onClick={e => setDelCounterHandler(e)}>Del</button>
         </li>
     );
 }
