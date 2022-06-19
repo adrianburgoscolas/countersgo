@@ -2,12 +2,15 @@ package routes
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"goreact/db"
 	"goreact/utils"
 	"log"
 	"net/http"
 	"time"
+	"regexp"
+	"unicode/utf8"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -31,6 +34,8 @@ type MyCustomClaims struct {
 
 //time of token and cookies expiracy in minutes
 const exp = 15
+
+
 
 func failedSession(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusUnauthorized)
@@ -59,6 +64,14 @@ func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	//user and password string validation
+	reg := regexp.MustCompile(`[[:graph:]]+`)
+	if !reg.MatchString(creds.User) || !reg.MatchString(creds.Password) || utf8.RuneCountInString(creds.User) > 32 || utf8.RuneCountInString(creds.Password) > 256 {
+		failedSession(w, errors.New("Bad user or password caracters"))
+		return
+	}
+	
+
 	//athentication
 	if err := db.AthenticateUser(creds.User, creds.Password); err != nil {
 		fmt.Printf("%s ,", err)
@@ -76,6 +89,13 @@ func HandlerRegister(w http.ResponseWriter, r *http.Request) {
 	
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	//user and password string validation
+	reg := regexp.MustCompile(`[[:graph:]]+`)
+	if !reg.MatchString(creds.User) || !reg.MatchString(creds.Password) || utf8.RuneCountInString(creds.User) > 32 || utf8.RuneCountInString(creds.Password) > 256 {
+		failedSession(w, errors.New("Bad user or password caracters"))
 		return
 	}
 

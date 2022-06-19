@@ -1,61 +1,42 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes} from "react-router-dom" 
+import { Route, Routes} from "react-router-dom" 
 
 import Dashboard from "./Components/Dashboard/Dashboard"
 import Prefences from "./Components/Preferences/Preferences"
 import Layout from "./Components/Layout/Layout";
 import NoPage from "./Components/NoPage/NoPage";
 import Login from "./Components/Login/Login";
-import useToken from "./CustomHooks/useToken";
-import useLogout from "./CustomHooks/useLogout";
-
+import Home from "./Components/Home/Home";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import { AuthProvider } from "./Components/AuthProvider/AuthProvider";
 
 
 function App() {
-
-  // const [sessionData, setSessionData] = useState({user: ""})
-  const [session, setSession] = useState({open: "false"})
-  const loginUser = useToken()
-  const logout = useLogout()
-
-  useEffect(()=>{
-      (async ()=>{
-          const tkn = await loginUser();
-          setSession(tkn)
-          // setSessionData({user: tkn.message})
-      })();
-  },[])
-
-  async function handleLogout() {
-    const tkn = await logout();
-    setSession(tkn)
-  }
-
-  if(session.open === "false") {
-    if(/user|pass/i.test(session.message)){
-      let alertText = /Error 1062: Duplicate entry/i.test(session.message)?"User already exist!":session.message
-      alert("Error, " + alertText)
-    }
-    
-    return <Login setTkn={setSession} />
-  }
   return (
-    <div className="text-center">
-      <div className="logout" onClick={handleLogout}>Logout</div>
-      <h1>
-        <div>Pro Counter</div>
-        <div>Hi "{session.message}"</div>
-      </h1>
-     <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Dashboard setTkn={setSession}/>} />
-            <Route path="preferences" element={<Prefences />} />
-            <Route path="*" element={<NoPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthProvider>
+      <div className="container mx-auto my-0 py-2 text-center text-stone-800 bg-stone-200 min-h-screen">
+        <h1 className="text-3xl font-bold m-3">
+          Pro Counter
+        </h1>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<Login />} />
+              <Route path="/" element={<Login />} />
+              <Route path="dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="preferences" element={
+                <ProtectedRoute>
+                  <Prefences />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<NoPage />} />
+            </Route>
+          </Routes>
+          <footer className="text-xs mt-12">Coded by <a className="text-sky-700" href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></footer>
+      </div>
+    </AuthProvider>
   );
 }
 

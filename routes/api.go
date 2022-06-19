@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"regexp"
+	"unicode/utf8"
 
 	"goreact/db"
 	"goreact/utils"
@@ -19,6 +21,8 @@ type CounterResponse struct {
 	Id int64 `json:"id"`
 }
 
+
+
 //Add counter entry point handler
 func HandlerAddCounter(w http.ResponseWriter, r *http.Request) {
 	clientClaims, err := utils.SessionValidation(w, r)
@@ -32,6 +36,18 @@ func HandlerAddCounter(w http.ResponseWriter, r *http.Request) {
 	
 	if err := json.NewDecoder(r.Body).Decode(&counter); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	//new counter validation
+	counterValue, err := strconv.Atoi(counter.Value)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	reg := regexp.MustCompile(`\w+`)
+	if !reg.MatchString(counter.Name)|| utf8.RuneCountInString(counter.Name) > 14 || counterValue > 10000 {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -82,6 +98,14 @@ func HandlerSetCounter(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	//set counter validation
+	reg := regexp.MustCompile(`\w+`)
+	if !reg.MatchString(counter.Name)|| utf8.RuneCountInString(counter.Name) > 14 || value > 10000 {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	id, err := db.SetCounter(clientClaims.User, counter.Name, value)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -103,6 +127,18 @@ func HandlerDelCounter(w http.ResponseWriter, r *http.Request) {
 	
 	if err := json.NewDecoder(r.Body).Decode(&counter); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	//new counter validation
+	counterValue, err := strconv.Atoi(counter.Value)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	reg := regexp.MustCompile(`\w+`)
+	if !reg.MatchString(counter.Name)|| utf8.RuneCountInString(counter.Name) > 14 || counterValue > 10000 {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	

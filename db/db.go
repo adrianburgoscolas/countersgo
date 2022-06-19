@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"regexp"
 
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -60,7 +61,7 @@ func AthenticateUser(userString, password string) error {
 	row := db.QueryRow("SELECT * FROM users WHERE username = ?", userString)
 	if err := row.Scan(&user.id, &user.username, &user.password, &user.createdAt); err != nil {
 		if err == sql.ErrNoRows {
-			return fmt.Errorf("Wrong user: %s!", userString)
+			return errors.New("Wrong user or password!")
 		}
 		return fmt.Errorf("User %s: %v", userString, err)
 	}
@@ -68,10 +69,11 @@ func AthenticateUser(userString, password string) error {
 	if match := CheckPasswordHash(password, user.password); match {
 		return nil
 	}
-	return errors.New("Wrong password")
+	return errors.New("Wrong user or password!")
 }
 
 func RegisterUser(userString, password string) (int64, error) {
+	reg := regexp.MustCompile(`'\w+'`)
 	db, err := ConnectDb()
 	defer db.Close()
 	if err != nil {
@@ -80,7 +82,8 @@ func RegisterUser(userString, password string) (int64, error) {
 	hash, _ := HashPassword(password)
 	result, err := db.Exec("INSERT INTO users (username,password,created_at) VALUES(?,?,?)", userString, hash, string(time.Now().Format("2006-01-02 15:04:05")))
 	if err != nil {
-		return 0, err
+		user := reg.FindString(err.Error())
+		return 0, fmt.Errorf("User %s is already taken", user)
 	}
 	if id, err := result.LastInsertId(); err != nil {
 		return 0, err

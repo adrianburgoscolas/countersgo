@@ -1,25 +1,33 @@
-import { useState } from "react";
-import useToken from "../../CustomHooks/useToken";
-import useRegister from "../../CustomHooks/useRegister";
+import { useState, useEffect } from "react";
+import useAuth from "../../CustomHooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-function Login(prop) {
-  const loginUser = useToken();
-  const registerUser = useRegister();
+
+function Login() {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [checkpass, setCheckPass] = useState("");
   const [register, setRegister] = useState(false);
+  const {token, Register, Login, Session} = useAuth();
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    Session()
+  },[]);
+
+  if(token.open === "true"){
+    navigate("/dashboard")
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (pass === checkpass || !register) {
-      const tkn = register
-        ? await registerUser(user, pass)
-        : await loginUser(user, pass);
+      register
+        ? Register(user, pass)
+        : Login(user, pass);
       setUser("");
       setPass("");
       setCheckPass("");
-      prop.setTkn(tkn);
     }
   }
 
@@ -39,11 +47,10 @@ function Login(prop) {
   );
 
   return (
-    <div className="text-center text-stone-800 py-10 bg-stone-200 min-h-screen">
-      <h1 className="text-3xl font-bold">Pro Counter Ultra Max</h1>
-      
-      <h2 className="text-2xl font-bold">{register ? "Register" : "Please Log In"}</h2>
-      <form className="m-5 p-5" onSubmit={handleSubmit}>
+    <div className="text-center text-stone-800 bg-stone-200">
+        <h2 className="text-2xl font-bold flex-1">{register ? "Register" : "Please LogIn"}</h2>
+        <div className="text-red-800 font-medium">{/user/i.test(token.message)?token.message:" "}</div>
+      <form className="w-80 mx-auto my-5 py-5 border-4 border-stone-300 rounded-xl" onSubmit={handleSubmit}>
         <label>
           <p className="mb-2 font-bold">Username</p>
           <input
@@ -63,22 +70,22 @@ function Login(prop) {
             type="password"
             placeholder="Enter password"
             value={pass}
-            maxLength={64}
+            maxLength={256}
             onChange={(e) => setPass(e.target.value)}
             required
           />
         </label>
         {register && pass !== "" ? repeatPass : ""}
         <div>
-          <button className="bg-sky-600 hover:bg-sky-700 font-bold text-stone-200 p-2 m-5 rounded-xl" disabled={register?pass !== checkpass || pass === "":false} type="submit">
-            Submit
+          <button className="bg-sky-700 hover:bg-sky-800 transition-all font-bold text-stone-200 p-2 m-5 rounded-xl" disabled={register?pass !== checkpass || pass === "":false} type="submit">
+          {register ? "Register" : "LogIn"}
           </button>
         </div>
       </form>
-      <button className="bg-sky-600 hover:bg-sky-700 font-bold text-stone-200 p-2 rounded-xl" onClick={() => setRegister((r) => !r)}>
+      <button className=" hover:text-stone-600 transition-all font-bold text-stone-800 p-2 rounded-xl" onClick={() => setRegister((r) => !r)}>
         {register ? "Login" : "Register"}
       </button>
-      <footer className="text-xs absolute left-0 right-0 bottom-10">By <a className="text-indigo-700" href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></footer>
+      
     </div>
   );
 }
