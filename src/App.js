@@ -34,7 +34,7 @@ function App() {
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>
-          <footer className="text-xs mt-12">Coded by <a className="text-sky-700" href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></footer>
+          <footer className="text-xs mt-12">Coded by <a className="text-sky-700 hover:underline hover:decoration-solid transition-all" href="https://adrianburgoscolas.github.io/portfolio/" target='_blank' rel='noopener noreferrer'>Adrian Burgos</a></footer>
       </div>
     </AuthProvider>
   );

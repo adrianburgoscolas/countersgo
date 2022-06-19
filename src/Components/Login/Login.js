@@ -77,7 +77,7 @@ function Login() {
         </label>
         {register && pass !== "" ? repeatPass : ""}
         <div>
-          <button className="bg-sky-700 hover:bg-sky-800 transition-all font-bold text-stone-200 p-2 m-5 rounded-xl" disabled={register?pass !== checkpass || pass === "":false} type="submit">
+          <button className="bg-sky-700 hover:bg-sky-900 transition-all font-bold text-stone-200 p-2 m-5 rounded-xl" disabled={register?pass !== checkpass || pass === "":false} type="submit">
           {register ? "Register" : "LogIn"}
           </button>
         </div>

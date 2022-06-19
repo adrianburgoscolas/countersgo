@@ -44,7 +44,7 @@ function Counter(prop) {
             <form className="flex-none" onChange={e => setCounterHandler(e)}>
                 <input className="w-20 rounded-xl px-2 text-left" min={0} max={10000} type="number" value={value<=10000?value:10000} onChange={e => setValue(e.currentTarget.value)} ></input>
             </form>
-            <button className="flex-none bg-stone-400 rounded-xl px-2" onClick={e => setDelCounterHandler(e)}>Del</button>
+            <button className="flex-none bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2" onClick={e => setDelCounterHandler(e)}>Del</button>
         </li>
     );
 }
