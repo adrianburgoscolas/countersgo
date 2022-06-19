@@ -40,13 +40,8 @@ func HandlerAddCounter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//new counter validation
-	counterValue, err := strconv.Atoi(counter.Value)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 	reg := regexp.MustCompile(`\w+`)
-	if !reg.MatchString(counter.Name)|| utf8.RuneCountInString(counter.Name) > 14 || counterValue > 10000 {
+	if !reg.MatchString(counter.Name)|| utf8.RuneCountInString(counter.Name) > 14 || counter.Value != ""{
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
