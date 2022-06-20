@@ -67,15 +67,16 @@ func main() {
 
 
 
-	if goEnv == "development" {
+	
 		if err := http.ListenAndServe(addr, nil); err != nil {
 			panic(err)
 		}
-	} else {
+	go func(){
 		if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
 			panic(err)
 		}
-	}
+	}()
+		
 
 	
 }
