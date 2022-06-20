@@ -512,6 +512,10 @@ video {
   margin-top: 0px;
   margin-bottom: 0px;
 }
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -519,10 +523,6 @@ video {
 .my-5 {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-}
-.mx-1 {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
 }
 .mt-12 {
   margin-top: 3rem;
@@ -559,9 +559,6 @@ video {
 }
 .justify-center {
   justify-content: center;
-}
-.gap-2 {
-  gap: 0.5rem;
 }
 .rounded-xl {
   border-radius: 0.75rem;

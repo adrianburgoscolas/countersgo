@@ -1,9 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
-	"log"
 
 	"goreact/middleware"
 	"goreact/routes"
@@ -11,23 +11,27 @@ import (
 
 //middlewares chaining
 func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.HandlerFunc {
-	for _, middleware := range(middelwares) {
+	for _, middleware := range middelwares {
 		f = middleware(f)
 	}
 	return f
 }
 
+func redirectTLS(w http.ResponseWriter, r *http.Request) {
+    http.Redirect(w, r, "https://" + r.Host + r.RequestURI, http.StatusMovedPermanently)
+}
+
 func main() {
 	//root entry point, serving main html page
-    http.HandleFunc("/", chain(routes.HandleRoot, middleware.Logger()))
+	http.HandleFunc("/", chain(routes.HandleRoot, middleware.Logger()))
 
 	//serving static files(css, jsvsscript, img)
 	fs := http.FileServer(http.Dir("build/static/"))
-    http.Handle("/static/", http.StripPrefix("/static", fs))
+	http.Handle("/static/", http.StripPrefix("/static", fs))
 
 	//API entry points
 	//login
-	http.HandleFunc("/login", chain(routes.HandlerLogin, middleware.Method("POST"),  middleware.Logger()))
+	http.HandleFunc("/login", chain(routes.HandlerLogin, middleware.Method("POST"), middleware.Logger()))
 
 	//register
 	http.HandleFunc("/register", chain(routes.HandlerRegister, middleware.Method("POST"), middleware.Logger()))
@@ -52,13 +56,23 @@ func main() {
 	port := os.Getenv("PORT")
 	goEnv := os.Getenv("GO_ENV")
 	if port == "" || goEnv == "development" {
-		addr = ":3001" 
+		addr = ":3001"
 	} else {
 		addr = ":" + port
 	}
 	log.Printf("Listening address%s", addr)
 
-    if err := http.ListenAndServe(addr, nil); err != nil {
-        panic(err)
-    }
+
+
+	if goEnv == "development" {
+		if err := http.ListenAndServe(addr, nil); err != nil {
+			panic(err)
+		}
+	} else {
+		if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
+			panic(err)
+		}
+	}
+
+	
 }

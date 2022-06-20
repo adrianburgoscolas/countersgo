@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 	"time"
-	"log"
 )
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
@@ -24,17 +24,17 @@ func Logger() Middleware {
 }
 
 func Method(m string) Middleware {
-    // Create a new Middleware
-    return func(f http.HandlerFunc) http.HandlerFunc {
-        // Define the http.HandlerFunc
-        return func(w http.ResponseWriter, r *http.Request) {
-            // Do middleware things
-            if r.Method != m {
-                http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-                return
-            }
-            // Call the next middleware/handler in chain
-            f(w, r)
-        }
-    }
+	// Create a new Middleware
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		// Define the http.HandlerFunc
+		return func(w http.ResponseWriter, r *http.Request) {
+			// Do middleware things
+			if r.Method != m {
+				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+				return
+			}
+			// Call the next middleware/handler in chain
+			f(w, r)
+		}
+	}
 }

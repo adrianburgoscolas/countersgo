@@ -8,8 +8,8 @@ import (
 	"goreact/utils"
 	"log"
 	"net/http"
-	"time"
 	"regexp"
+	"time"
 	"unicode/utf8"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -17,14 +17,13 @@ import (
 
 type credentials struct {
 	Password string `json:"password"`
-	User string `json:"user"`
+	User     string `json:"user"`
 }
 
 type myToken struct {
-	Open string `json:"open"` 
+	Open    string `json:"open"`
 	Message string `json:"message"`
 }
-
 
 //claims
 type MyCustomClaims struct {
@@ -34,8 +33,6 @@ type MyCustomClaims struct {
 
 //time of token and cookies expiracy in minutes
 const exp = 15
-
-
 
 func failedSession(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusUnauthorized)
@@ -70,7 +67,6 @@ func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		failedSession(w, errors.New("Bad user or password caracters"))
 		return
 	}
-	
 
 	//athentication
 	if err := db.AthenticateUser(creds.User, creds.Password); err != nil {
@@ -78,15 +74,15 @@ func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		failedSession(w, err)
 		return
 	}
-	
-	utils.SetSession(creds.User, w)		
+
+	utils.SetSession(creds.User, w)
 	log.Printf("User: %s logged in", creds.User)
 }
 
 //registering entry point
 func HandlerRegister(w http.ResponseWriter, r *http.Request) {
 	var creds credentials
-	
+
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -105,7 +101,7 @@ func HandlerRegister(w http.ResponseWriter, r *http.Request) {
 		failedSession(w, err)
 		return
 	}
-	
+
 	//set session
 	log.Printf("User: %s logged in", creds.User)
 	utils.SetSession(creds.User, w)
@@ -120,17 +116,15 @@ func HandlerLogout(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Printf("user: %v, issuer: %v ,", clientClaims.User, clientClaims.RegisteredClaims.Issuer)
 		http.SetCookie(w, &http.Cookie{
-			Name:    "session_token",
-			Value:   "",
-			Expires: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+			Name:     "session_token",
+			Value:    "",
+			Expires:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			HttpOnly: true,
 			SameSite: http.SameSiteLaxMode,
 		})
-	
+
 		fmt.Print("Logged out ")
 		failedSession(w, err)
 		return
 	}
 }
-
-

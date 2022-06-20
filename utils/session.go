@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"net/http"
-	"time"
 	"encoding/json"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -13,11 +13,9 @@ import (
 const exp = 15
 
 type myToken struct {
-	Open string `json:"open"` 
+	Open    string `json:"open"`
 	Message string `json:"message"`
-
 }
-
 
 //jwt key for signature
 var MySigningKey = []byte(os.Getenv("JWT_SIG_KEY"))
@@ -28,18 +26,17 @@ type MyCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-
 func SessionValidation(w http.ResponseWriter, r *http.Request) (MyCustomClaims, error) {
 	sessionToken, err := r.Cookie("session_token")
 	if err != nil {
 		// For any other type of error, return a bad request status
 		return MyCustomClaims{}, err
-	} 
+	}
 	token, err := jwt.ParseWithClaims(sessionToken.Value, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return MySigningKey, nil
 	})
 
-	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid{
+	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
 		return *claims, nil
 	} else {
 		return MyCustomClaims{}, err
@@ -62,9 +59,9 @@ func SetSession(user string, w http.ResponseWriter) {
 
 	//storing jwt on a session cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:    "session_token",
-		Value:   ss,
-		Expires: time.Now().Add(exp * time.Minute),
+		Name:     "session_token",
+		Value:    ss,
+		Expires:  time.Now().Add(exp * time.Minute),
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	})
