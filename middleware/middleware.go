@@ -8,6 +8,20 @@ import (
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
 
+func  RedirectTLS() Middleware {
+	return func(hf http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if r.Header.Get("x-forwarded-proto") != "https" {
+				http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
+			}
+			hf(w, r)
+		}
+	}
+}
+
+
+
+
 func Logger() Middleware {
 	//create new middleware
 	return func(hf http.HandlerFunc) http.HandlerFunc {

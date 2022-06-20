@@ -17,16 +17,10 @@ func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.Handle
 	return f
 }
 
-func redirectTLS(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("x-forwarded-proto") != "https" {
-		http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
-	}
-
-}
 
 func main() {
 	//root entry point, serving main html page
-	http.HandleFunc("/", chain(routes.HandleRoot, middleware.Logger()))
+	http.HandleFunc("/", chain(routes.HandleRoot, middleware.RedirectTLS(), middleware.Logger()))
 
 	//serving static files(css, jsvsscript, img)
 	fs := http.FileServer(http.Dir("build/static/"))
@@ -65,7 +59,7 @@ func main() {
 	}
 	log.Printf("Listening address%s", addr)
 
-	if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
+	if err := http.ListenAndServe(addr, nil); err != nil {
 		panic(err)
 	}
 
