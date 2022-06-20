@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"time"
 	"unicode/utf8"
+	"os"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -30,9 +31,6 @@ type MyCustomClaims struct {
 	User string `json:"user"`
 	jwt.RegisteredClaims
 }
-
-//time of token and cookies expiracy in minutes
-const exp = 15
 
 func failedSession(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusUnauthorized)
@@ -116,11 +114,12 @@ func HandlerLogout(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Printf("user: %v, issuer: %v ,", clientClaims.User, clientClaims.RegisteredClaims.Issuer)
 		http.SetCookie(w, &http.Cookie{
-			Name:     "session_token",
+			Name:     "countersgo_session_token",
 			Value:    "",
 			Expires:  time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
 			HttpOnly: true,
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteStrictMode,
+			Secure: os.Getenv("GO_ENV") != "development",
 		})
 
 		fmt.Print("Logged out ")

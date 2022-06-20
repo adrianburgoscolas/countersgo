@@ -63,8 +63,4 @@ func main() {
 		panic(err)
 	}
 
-	// if err := http.ListenAndServe(addr, nil); err != nil {
-	// 	panic(err)
-	// }
-
 }

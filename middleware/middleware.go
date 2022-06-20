@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"os"
 )
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
@@ -11,8 +12,10 @@ type Middleware func(http.HandlerFunc) http.HandlerFunc
 func  RedirectTLS() Middleware {
 	return func(hf http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			if r.Header.Get("x-forwarded-proto") != "https" {
-				http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
+			if goEnv := os.Getenv("GO_ENV"); goEnv != "development" {
+				if r.Header.Get("x-forwarded-proto") != "https" {
+					http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
+				}
 			}
 			hf(w, r)
 		}

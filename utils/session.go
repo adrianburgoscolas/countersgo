@@ -10,7 +10,7 @@ import (
 )
 
 //time of token and cookies expiracy in minutes
-const exp = 15
+const exp = 24
 
 type myToken struct {
 	Open    string `json:"open"`
@@ -27,7 +27,7 @@ type MyCustomClaims struct {
 }
 
 func SessionValidation(w http.ResponseWriter, r *http.Request) (MyCustomClaims, error) {
-	sessionToken, err := r.Cookie("session_token")
+	sessionToken, err := r.Cookie("countersgo_session_token")
 	if err != nil {
 		// For any other type of error, return a bad request status
 		return MyCustomClaims{}, err
@@ -48,7 +48,7 @@ func SetSession(user string, w http.ResponseWriter) {
 		user,
 		jwt.RegisteredClaims{
 			// Also fixed dates can be used for the NumericDate
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(exp * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(exp * time.Hour)),
 			Issuer:    "GoReactApp",
 		},
 	}
@@ -59,11 +59,12 @@ func SetSession(user string, w http.ResponseWriter) {
 
 	//storing jwt on a session cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:     "session_token",
+		Name:     "countersgo_session_token",
 		Value:    ss,
-		Expires:  time.Now().Add(exp * time.Minute),
+		Expires:  time.Now().Add(exp * time.Hour),
 		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteStrictMode,
+		Secure:   os.Getenv("GO_ENV") != "development",
 	})
 	json.NewEncoder(w).Encode(myToken{"true", user})
 }
