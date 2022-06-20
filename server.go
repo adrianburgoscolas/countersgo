@@ -18,7 +18,10 @@ func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.Handle
 }
 
 func redirectTLS(w http.ResponseWriter, r *http.Request) {
-    http.Redirect(w, r, "https://" + r.Host + r.RequestURI, http.StatusMovedPermanently)
+	if r.Header.Get("x-forwarded-proto") != "https" {
+		http.Redirect(w, r, "https://" + r.Host + r.RequestURI, http.StatusMovedPermanently)
+	}
+    
 }
 
 func main() {
