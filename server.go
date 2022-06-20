@@ -19,9 +19,9 @@ func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.Handle
 
 func redirectTLS(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("x-forwarded-proto") != "https" {
-		http.Redirect(w, r, "https://" + r.Host + r.RequestURI, http.StatusMovedPermanently)
+		http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
 	}
-    
+
 }
 
 func main() {
@@ -65,19 +65,12 @@ func main() {
 	}
 	log.Printf("Listening address%s", addr)
 
-
-	go func(){
-		if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
-			panic(err)
-		}
-	}()
-
+	if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
+		panic(err)
+	}
 
 	// if err := http.ListenAndServe(addr, nil); err != nil {
 	// 	panic(err)
 	// }
-	
-		
 
-	
 }
