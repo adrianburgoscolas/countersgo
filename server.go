@@ -66,16 +66,17 @@ func main() {
 	log.Printf("Listening address%s", addr)
 
 
-
-	
-		if err := http.ListenAndServe(addr, nil); err != nil {
-			panic(err)
-		}
-	// go func(){
+	go func(){
 		if err := http.ListenAndServe(addr, http.HandlerFunc(redirectTLS)); err != nil {
 			panic(err)
 		}
-	// }()
+	}()
+
+
+	if err := http.ListenAndServe(addr, nil); err != nil {
+		panic(err)
+	}
+	
 		
 
 	
