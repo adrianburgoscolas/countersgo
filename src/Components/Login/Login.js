@@ -10,6 +10,8 @@ function Login() {
   const { token, Register, Login, Session } = useAuth();
   const navigate = useNavigate();
 
+  const userLang = navigator.language || navigator.userLanguage
+
   useEffect(() => {
     Session();
   }, []);
@@ -54,13 +56,31 @@ function Login() {
       <h2 className="text-2xl font-bold flex-1">
         {register ? (
           <div>
-            <p>Register</p>
-            <p className="text-sm font-normal text-stone-600">to create a new account</p>
+            <p>
+		    {
+		    	userLang === "es-ES"?
+			"Registrese":
+			"Register"
+		    }
+	    </p>
+            <p className="text-sm font-normal text-stone-600">{
+		  	userLang === "es-ES" ?
+			"para crear su cuenta":
+			"to create a new account"
+		  }</p>
           </div>
         ) : (
           <div>
-            <p>Please LogIn</p>
-            <p className="text-sm font-normal text-stone-600">if you have an account</p>
+            <p>{
+			userLang === "es-ES"?
+		        "Por Favor Acceda":
+			"Please LogIn"
+	    }</p>
+            <p className="text-sm font-normal text-stone-600">{
+		    	userLang === "es-ES"?
+			"si tiene una cuenta":
+		  	"if you have an account"
+		  }</p>
           </div>
         )}
       </h2>
@@ -72,11 +92,15 @@ function Login() {
         onSubmit={handleSubmit}
       >
         <label>
-          <p className="mb-2 font-bold">Username</p>
+          <p className="mb-2 font-bold">{
+		  	userLang === "es-ES"?
+			"Usuario":
+			"Username"
+		}</p>
           <input
             className="text-center rounded-xl p-2"
             type="text"
-            placeholder="Enter user"
+	    placeholder={userLang === "es-ES"?"Usuario":"Enter user"}
             value={user}
             maxLength={32}
             onChange={(e) => setUser(e.target.value)}
@@ -84,11 +108,11 @@ function Login() {
           />
         </label>
         <label>
-          <p className="mt-5 mb-2 font-bold">Password</p>
+		<p className="mt-5 mb-2 font-bold">{userLang === "es-ES" ?"Contraseña":"Password"}</p>
           <input
             className="text-center rounded-xl p-2"
             type="password"
-            placeholder="Enter password"
+            placeholder={userLang === "es-ES" ?"Contraseña":"Password"}
             value={pass}
             maxLength={256}
             onChange={(e) => setPass(e.target.value)}
@@ -102,21 +126,37 @@ function Login() {
             disabled={register ? pass !== checkpass || pass === "" : false}
             type="submit"
           >
-            {register ? "Register" : "LogIn"}
+	{
+		register ? 
+
+		userLang === "es-ES"?"Registrar":"Register":
+		userLang === "es-ES"?"Acceder":"LogIn"
+	}
           </button>
         </div>
       </form>
-      <p className="text-sm font-normal text-stone-600">or</p>
+      <p className="text-sm font-normal text-stone-600">{userLang === "es-ES"?"o":"or"}</p>
       <button
         className="border-4 border-stone-400 hover:bg-stone-400 transition-all font-bold text-stone-800 p-2 rounded-xl"
         onClick={() => setRegister((r) => !r)}
       >
-        {register ? "Login" : "Register"}
+        {	register ? 
+		userLang === "es-ES"?"Acceder":"LogIn" : 
+	      	userLang === "es-ES"?"Registrar":"Register"
+	}
       </button>
       <p>{register ? (
-        <p className="text-sm font-normal text-stone-600">if you have an account</p>
+	      <p className="text-sm font-normal text-stone-600">{
+			userLang === "es-ES"?
+			"si tiene una cuenta":
+		  	"if you have an account"
+	      }</p>
       ) : (
-        <p className="text-sm font-normal text-stone-600">to create a new accout</p>
+	      <p className="text-sm font-normal text-stone-600">{
+			userLang === "es-ES" ?
+			"para crear su cuenta":
+			"to create a new account"
+	      }</p>
       )}</p>
     </div>
   );

@@ -3,6 +3,7 @@ import useAuth from "../../CustomHooks/useAuth";
 
 function Preferences() {
   const { token, Session } = useAuth();
+  const userLang = navigator.language || navigator.userLanguage;
 
   useEffect(() => {
     Session();
@@ -10,8 +11,12 @@ function Preferences() {
 
   return (
     <>
-      <h2 className="text-2xl mt-2 font-bold">Preferences</h2>
-      <p>Protected Content!</p>
+      <h2 className="text-2xl mt-2 font-bold">
+        {userLang === "es-ES" ? "Preferencias" : "Preferences"}
+      </h2>
+      <p>
+        {userLang === "es-ES" ? "Contenido protegido!" : "Protected Content!"}
+      </p>
     </>
   );
 }

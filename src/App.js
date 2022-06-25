@@ -13,7 +13,11 @@ function App() {
   return (
     <AuthProvider>
       <div className="container mx-auto my-0 py-2 text-center text-stone-800 bg-stone-200 min-h-screen">
-        <h1 className="text-3xl font-bold m-3">Pro Counter</h1>
+        <h1 className="text-3xl font-bold m-3">{
+	      	userLang === "es-ES"?
+		"Contador Pro":
+		"Pro Counter"
+	      }</h1>
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Login />} />
@@ -38,7 +42,12 @@ function App() {
           </Route>
         </Routes>
         <footer className="text-xs mt-12">
-          Coded by{" "}
+		{
+
+			userLang === "es-ES"?
+			"Escrito por ":
+			"Coded by "
+		}
           <a
             className="text-sky-700 hover:underline hover:decoration-solid transition-all"
             href="https://adrianburgoscolas.github.io/portfolio/"

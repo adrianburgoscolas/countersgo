@@ -7,6 +7,7 @@ function Counter(prop) {
   const [counterHandler, setCounterHandler] = useState();
   const [delCounterHandler, setDelCounterHandler] = useState();
   const { Session } = useAuth();
+  const userLang = navigator.language || navigator.userLanguage;
 
   useEffect(() => {
     if (counterHandler) {
@@ -56,7 +57,7 @@ function Counter(prop) {
         className="mx-1 flex-none bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2"
         onClick={(e) => setDelCounterHandler(e)}
       >
-        Del
+        {userLang === "es-ES" ? "Borrar" : "Del"}
       </button>
     </li>
   );

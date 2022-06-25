@@ -3,6 +3,8 @@ import useAuth from "../../CustomHooks/useAuth";
 
 function Layout() {
   const { token, Logout } = useAuth();
+  const userLang = navigator.language || navigator.userLanguage;
+
   return (
     <>
       {token.open === "true" ? (
@@ -11,20 +13,20 @@ function Layout() {
             to="/dashboard"
             className="mx-1 bg-stone-200 hover:bg-stone-300 transition-all rounded-xl px-2"
           >
-            Dashboard
+            {userLang === "es-ES" ? "Panel" : "Dashboard"}
           </Link>
           <Link
             to="/preferences"
             className="mx-1 bg-stone-200 hover:bg-stone-300 transition-all rounded-xl px-2"
           >
-            Prefences
+            {userLang === "es-ES" ? "Preferencias" : "Prefences"}
           </Link>
           <Link
             to="/logout"
             onClick={Logout}
             className="mx-1 bg-stone-800 hover:bg-stone-600 text-stone-200 rounded-xl px-2"
           >
-            Logout
+            {userLang === "es-ES" ? "Cerrar sesion" : "Logout"}
           </Link>
         </nav>
       ) : (
