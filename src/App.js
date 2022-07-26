@@ -20,7 +20,7 @@ function App() {
   return (
     <AuthProvider>
       <div className="container mx-auto my-0 py-2 text-center text-stone-800 bg-stone-200 min-h-screen">
-        <h1 className="text-3xl font-bold m-3">{}</h1>
+        <h1 className="text-5xl font-bold m-3">Pro Counter</h1>
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Login />} />
