@@ -17,14 +17,25 @@ func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.Handle
 	return f
 }
 
-
 func main() {
 	//root entry point, serving main html page
-	http.HandleFunc("/", chain(routes.HandleRoot, middleware.RedirectTLS(), middleware.Logger()))
+	http.HandleFunc("/", chain(routes.HandleRoot, middleware.Method("GET"), middleware.RedirectTLS(), middleware.Logger()))
 
 	//serving static files(css, jsvsscript, img)
-	fs := http.FileServer(http.Dir("build/static/"))
-	http.Handle("/static/", http.StripPrefix("/static", fs))
+	fs := http.FileServer(http.Dir("./build/static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	fs1 := http.FileServer(http.Dir("./build"))
+	http.Handle("/favicon.ico", fs1)
+	fs2 := http.FileServer(http.Dir("./build"))
+	http.Handle("/logo192.png", fs2)
+	fs3 := http.FileServer(http.Dir("./build"))
+	http.Handle("/logo512.png", fs3)
+	fs4 := http.FileServer(http.Dir("./build"))
+	http.Handle("/manifest.json", fs4)
+	fs5 := http.FileServer(http.Dir("./build"))
+	http.Handle("/robots.txt", fs5)
+	fs6 := http.FileServer(http.Dir("./build"))
+	http.Handle("/asset-manifest.json", fs6)
 
 	//API entry points
 	//login
