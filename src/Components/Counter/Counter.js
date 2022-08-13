@@ -3,7 +3,7 @@ import useAuth from "../../CustomHooks/useAuth";
 
 function Counter(prop) {
   const [value, setValue] = useState(prop.counterValue);
-  const [name, setName] = useState(prop.counterName);
+  const name = prop.counterName;
   const [counterHandler, setCounterHandler] = useState();
   const [delCounterHandler, setDelCounterHandler] = useState();
   const { Session } = useAuth();
@@ -21,6 +21,7 @@ function Counter(prop) {
       counterHandler.preventDefault();
     }
     Session();
+    //eslint-disable-next-line
   }, [counterHandler]);
 
   //del counter
@@ -32,10 +33,11 @@ function Counter(prop) {
         body: JSON.stringify({ name, value: "0" }),
       })
         .then((data) => data.json())
-        .then((data) => {
+        .then(() => {
           prop.setReload((state) => !state);
         });
     }
+    //eslint-disable-next-line
   }, [delCounterHandler]);
 
   return (

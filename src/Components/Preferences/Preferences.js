@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import useAuth from "../../CustomHooks/useAuth";
 
 function Preferences() {
-  const { token, Session } = useAuth();
+  const { Session } = useAuth();
   const userLang = navigator.language || navigator.userLanguage;
 
   useEffect(() => {
     Session();
+    //eslint-disable-next-line
   }, []);
 
   return (

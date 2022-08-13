@@ -6,15 +6,13 @@ import NoPage from "./Components/NoPage/NoPage";
 import Login from "./Components/Login/Login";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import { AuthProvider } from "./Components/AuthProvider/AuthProvider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 var userLang = navigator.language || navigator.userLanguage;
 
 function App() {
-  const [title, setTitle] = useState("");
   useEffect(() => {
     const appTitle = userLang === "es-ES" ? "Contador Pro" : "Pro Counter";
-    setTitle(appTitle);
     document.title = appTitle;
   });
   return (

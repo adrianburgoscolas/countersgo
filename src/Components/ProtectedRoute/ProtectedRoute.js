@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../../CustomHooks/useAuth";
 
@@ -8,6 +8,7 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     Session();
+    //eslint-disable-next-line
   }, []);
 
   if (token.open === "false") {

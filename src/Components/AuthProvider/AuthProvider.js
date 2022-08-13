@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useToken from "../../CustomHooks/useToken";
 import useLogout from "../../CustomHooks/useLogout";
 import useRegister from "../../CustomHooks/useRegister";
@@ -8,7 +8,6 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [session, setSession] = useState({ open: "false" });
   const token = useToken();
   const logout = useLogout();
@@ -27,8 +26,6 @@ function AuthProvider({ children }) {
     }
   }
 
-  let from = location.state?.from?.pathname || "/";
-
   async function handleSession() {
     const tkn = await token();
     setSession(tkn);
@@ -46,7 +43,7 @@ function AuthProvider({ children }) {
     Register: handleRegister,
     Logout: handleLogout,
     Session: handleSession,
-  }
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

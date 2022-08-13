@@ -30,7 +30,7 @@ function Dashboard() {
       handleAddCounter.preventDefault();
       Session();
     }
-    // eslint-disable-next-line
+    //eslint-disable-next-line
   }, [handleAddCounter]);
 
   useEffect(() => {
@@ -41,6 +41,7 @@ function Dashboard() {
         data.open === "false" ? setCounters({}) : setCounters(data)
       );
     Session();
+    //eslint-disable-next-line
   }, [reload]);
 
   const list = Object.keys(counters).map((key, i) => {
