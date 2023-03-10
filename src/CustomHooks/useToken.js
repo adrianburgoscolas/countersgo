@@ -1,6 +1,6 @@
 function useToken() {
   return async function (user = "", password = "") {
-    return fetch("/login", {
+    return fetch("https://countersgo-backend.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

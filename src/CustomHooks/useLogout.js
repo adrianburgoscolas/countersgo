@@ -1,6 +1,6 @@
 function useLogout() {
   return async function (user = "", password = "") {
-    return fetch("/logout", {
+    return fetch("https://countersgo-backend.onrender.com/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

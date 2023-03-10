@@ -11,7 +11,7 @@ function Counter(prop) {
 
   useEffect(() => {
     if (counterHandler) {
-      fetch("/setcounter", {
+      fetch("https://countersgo-backend.onrender.com/setcounter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, value }),
@@ -27,7 +27,7 @@ function Counter(prop) {
   //del counter
   useEffect(() => {
     if (delCounterHandler) {
-      fetch("/delcounter", {
+      fetch("https://countersgo-backend.onrender.com/delcounter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, value: "0" }),

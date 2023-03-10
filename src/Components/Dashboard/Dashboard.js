@@ -13,7 +13,7 @@ function Dashboard() {
   //add counter
   useEffect(() => {
     if (handleAddCounter) {
-      fetch("/addcounter", {
+      fetch("https://countersgo-backend.onrender.com/addcounter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newCounter }),
@@ -35,7 +35,7 @@ function Dashboard() {
 
   useEffect(() => {
     setCounters({});
-    fetch("/getcounters")
+    fetch("https://countersgo-backend.onrender.com/getcounters")
       .then((data) => data.json())
       .then((data) =>
         data.open === "false" ? setCounters({}) : setCounters(data)
