@@ -48,12 +48,12 @@ func ConnectDb() (*sql.DB, error) {
 		return &sql.DB{}, pingErr
 	}
 
-//if _, err := db.Exec("CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, created_at VARCHAR(50) NOT NULL)"); err != nil {
-//  log.Panic(err)
-//}
-//if _, err := db.Exec("CREATE TABLE IF NOT EXISTS counters (id INT PRIMARY KEY AUTO_INCREMENT, countername VARCHAR(50) NOT NULL, countervalue INT, userid INT NOT NULL)"); err != nil {
-//  log.Panic(err)
-//}
+  if _, err := db.Exec("CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, created_at DATE NOT NULL)"); err != nil {
+    log.Panic(err)
+  }
+  if _, err := db.Exec("CREATE TABLE IF NOT EXISTS counters (id INT PRIMARY KEY AUTO_INCREMENT, countername VARCHAR(50) NOT NULL, countervalue INT, userid INT NOT NULL)"); err != nil {
+    log.Panic(err)
+  }
 
 	return db, nil
 }
