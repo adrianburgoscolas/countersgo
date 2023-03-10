@@ -63,7 +63,8 @@ func SetSession(user string, w http.ResponseWriter) {
 		Value:    ss,
 		Expires:  time.Now().Add(exp * time.Hour),
 		HttpOnly: true,
-		Secure:   os.Getenv("GO_ENV") != "development",
+	//SameSite: http.SameSiteStrictMode,
+	//Secure:   os.Getenv("GO_ENV") != "development",
 	})
 	json.NewEncoder(w).Encode(myToken{"true", user})
 }

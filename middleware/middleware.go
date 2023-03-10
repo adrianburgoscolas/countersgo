@@ -31,7 +31,7 @@ func Cors() Middleware {
 		//define http.HandlerFunc
 		return func(w http.ResponseWriter, r *http.Request) {
 			//do middleware
-      w.Header().Set("Access-Control-Allow-Origin", "*")
+      w.Header().Set("Access-Control-Allow-Origin", "https://countersgo.onrender.com")
 			//call next
 			hf(w, r)
 		}
