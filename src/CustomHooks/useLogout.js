@@ -2,7 +2,7 @@ function useLogout() {
   return async function (user = "", password = "") {
     return fetch("https://countersgo-backend.onrender.com/logout", {
       method: "POST",
-        mode: "cors",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
       },

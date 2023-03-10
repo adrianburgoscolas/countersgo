@@ -13,7 +13,7 @@ function Counter(prop) {
     if (counterHandler) {
       fetch("https://countersgo-backend.onrender.com/setcounter", {
         method: "POST",
-        mode: "cors",
+      mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, value }),
       })
@@ -30,7 +30,7 @@ function Counter(prop) {
     if (delCounterHandler) {
       fetch("https://countersgo-backend.onrender.com/delcounter", {
         method: "POST",
-        mode: "cors",
+      mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, value: "0" }),
       })
