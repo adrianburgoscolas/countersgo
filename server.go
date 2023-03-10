@@ -39,25 +39,25 @@ func main() {
 
 	//API entry points
 	//login
-	http.HandleFunc("/login", chain(routes.HandlerLogin, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/login", chain(routes.HandlerLogin, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//register
-	http.HandleFunc("/register", chain(routes.HandlerRegister, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/register", chain(routes.HandlerRegister, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//logout
-	http.HandleFunc("/logout", chain(routes.HandlerLogout, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/logout", chain(routes.HandlerLogout, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//add counter
-	http.HandleFunc("/addcounter", chain(routes.HandlerAddCounter, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/addcounter", chain(routes.HandlerAddCounter, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//get counters
-	http.HandleFunc("/getcounters", chain(routes.HandlerGetCounters, middleware.Method("GET"), middleware.Logger()))
+	http.HandleFunc("/getcounters", chain(routes.HandlerGetCounters, middleware.Method("GET"), middleware.Logger(), middleware.Cors()))
 
 	//set counter
-	http.HandleFunc("/setcounter", chain(routes.HandlerSetCounter, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/setcounter", chain(routes.HandlerSetCounter, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//set counter
-	http.HandleFunc("/delcounter", chain(routes.HandlerDelCounter, middleware.Method("POST"), middleware.Logger()))
+	http.HandleFunc("/delcounter", chain(routes.HandlerDelCounter, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
 
 	//Get environment listten port
 	var addr string

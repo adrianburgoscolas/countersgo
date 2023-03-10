@@ -25,6 +25,20 @@ func  RedirectTLS() Middleware {
 
 
 
+func Cors() Middleware {
+	//create new middleware
+	return func(hf http.HandlerFunc) http.HandlerFunc {
+		//define http.HandlerFunc
+		return func(w http.ResponseWriter, r *http.Request) {
+			//do middleware
+      w.Header().Set("Access-Control-Allow-Origin", "https://countersgo.onrender.com")
+			//call next
+			hf(w, r)
+		}
+
+	}
+}
+
 func Logger() Middleware {
 	//create new middleware
 	return func(hf http.HandlerFunc) http.HandlerFunc {
