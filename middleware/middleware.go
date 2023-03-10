@@ -32,6 +32,9 @@ func Cors() Middleware {
 		return func(w http.ResponseWriter, r *http.Request) {
 			//do middleware
       w.Header().Set("Access-Control-Allow-Origin", "https://countersgo.onrender.com")
+      w.Header().Set("Access-Control-Allow-Credentials", "true")
+      w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+      w.Header().Set("Access-Control-Allow-Headers", "Content-type")
 			//call next
 			hf(w, r)
 		}
@@ -46,7 +49,7 @@ func Logger() Middleware {
 		return func(w http.ResponseWriter, r *http.Request) {
 			//do middleware
 			start := time.Now()
-			defer func() { log.Println(r.URL.Path, time.Since(start)) }()
+			defer func() { log.Println(r.Method, r.URL.Path, time.Since(start)) }()
 			//call next
 			hf(w, r)
 		}
@@ -60,7 +63,7 @@ func Method(m string) Middleware {
 		// Define the http.HandlerFunc
 		return func(w http.ResponseWriter, r *http.Request) {
 			// Do middleware things
-			if r.Method != m {
+			if r.Method != m && r.Method != "OPTIONS"{
 				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 				return
 			}

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-	"strconv"
 	"unicode/utf8"
 
 	"goreact/db"
@@ -13,7 +12,7 @@ import (
 )
 
 type Counter struct {
-	Value string `json:"value"`
+	Value int `json:"value"`
 	Name  string `json:"name"`
 }
 
@@ -23,6 +22,9 @@ type CounterResponse struct {
 
 //Add counter entry point handler
 func HandlerAddCounter(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "OPTIONS" {
+    return
+  }
 	clientClaims, err := utils.SessionValidation(w, r)
 	if err != nil {
 		fmt.Printf("Unauthorized: %s ,", err)
@@ -39,7 +41,7 @@ func HandlerAddCounter(w http.ResponseWriter, r *http.Request) {
 
 	//new counter validation
 	reg := regexp.MustCompile(`\w+`)
-	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 || counter.Value != "" {
+	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -72,6 +74,10 @@ func HandlerGetCounters(w http.ResponseWriter, r *http.Request) {
 
 //Set counter entry point handler
 func HandlerSetCounter(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "OPTIONS" {
+    return
+  }
+
 	clientClaims, err := utils.SessionValidation(w, r)
 	if err != nil {
 		fmt.Printf("Unauthorized: %s ,", err)
@@ -82,11 +88,11 @@ func HandlerSetCounter(w http.ResponseWriter, r *http.Request) {
 	counter := Counter{}
 
 	if err := json.NewDecoder(r.Body).Decode(&counter); err != nil {
+    fmt.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	value, err := strconv.Atoi(counter.Value)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -94,12 +100,12 @@ func HandlerSetCounter(w http.ResponseWriter, r *http.Request) {
 
 	//set counter validation
 	reg := regexp.MustCompile(`\w+`)
-	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 || value > 10000 {
+	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 || counter.Value > 10000 {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	id, err := db.SetCounter(clientClaims.User, counter.Name, value)
+	id, err := db.SetCounter(clientClaims.User, counter.Name, counter.Value)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -109,6 +115,9 @@ func HandlerSetCounter(w http.ResponseWriter, r *http.Request) {
 
 //Del counter entry point handler
 func HandlerDelCounter(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "OPTIONS" {
+    return
+  }
 	clientClaims, err := utils.SessionValidation(w, r)
 	if err != nil {
 		fmt.Printf("Unauthorized: %s ,", err)
@@ -124,13 +133,12 @@ func HandlerDelCounter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//new counter validation
-	counterValue, err := strconv.Atoi(counter.Value)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	reg := regexp.MustCompile(`\w+`)
-	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 || counterValue > 10000 {
+	if !reg.MatchString(counter.Name) || utf8.RuneCountInString(counter.Name) > 14 || counter.Value > 10000 {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

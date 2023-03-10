@@ -2,7 +2,8 @@ function useRegister() {
   return async function (user = "", password = "") {
     return fetch("https://countersgo-backend.onrender.com/register", {
       method: "POST",
-        mode: "no-cors",
+      mode: "cors",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

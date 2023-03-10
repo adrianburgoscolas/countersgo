@@ -37,26 +37,30 @@ func failedSession(w http.ResponseWriter, err error) {
 	json.NewEncoder(w).Encode(myToken{"false", fmt.Sprint(err)})
 }
 
+//session entry point
+func HandlerSession(w http.ResponseWriter, r *http.Request) {
+  //client session validation
+  if clientClaims, err := utils.SessionValidation(w, r); err != nil {
+    fmt.Printf("Unauthorized: %s ,", err)
+    failedSession(w, err)
+    return
+  } else {
+    fmt.Printf("user: %v, issuer: %v ,", clientClaims.User, clientClaims.RegisteredClaims.Issuer)
+    json.NewEncoder(w).Encode(myToken{"true", clientClaims.User})
+    return
+  }
+}
 //login entry point
 func HandlerLogin(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "OPTIONS" {
+    return
+  }
+
 	var creds credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
-	}
-
-	if creds.User == "" && creds.Password == "" {
-		//client session validation
-		if clientClaims, err := utils.SessionValidation(w, r); err != nil {
-			fmt.Printf("Unauthorized: %s ,", err)
-			failedSession(w, err)
-			return
-		} else {
-			fmt.Printf("user: %v, issuer: %v ,", clientClaims.User, clientClaims.RegisteredClaims.Issuer)
-			json.NewEncoder(w).Encode(myToken{"true", clientClaims.User})
-			return
-		}
 	}
 
 	//user and password string validation
@@ -79,8 +83,11 @@ func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 
 //registering entry point
 func HandlerRegister(w http.ResponseWriter, r *http.Request) {
-	var creds credentials
+  if r.Method == "OPTIONS" {
+    return
+  }
 
+	var creds credentials
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -107,6 +114,9 @@ func HandlerRegister(w http.ResponseWriter, r *http.Request) {
 
 //Logout entry point
 func HandlerLogout(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "OPTIONS" {
+    return
+  }
 	if clientClaims, err := utils.SessionValidation(w, r); err != nil {
 		fmt.Printf("Unauthorized: %s ,", err)
 		failedSession(w, err)

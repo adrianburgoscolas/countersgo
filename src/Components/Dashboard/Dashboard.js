@@ -4,39 +4,40 @@ import useAuth from "../../CustomHooks/useAuth";
 
 function Dashboard() {
   const [newCounter, setNewCounter] = useState("");
-  const [handleAddCounter, setHandleAddCounter] = useState();
   const [counters, setCounters] = useState({});
   const [reload, setReload] = useState(true);
-  const { token, Session } = useAuth();
+  const { auth, Session } = useAuth();
   const userLang = navigator.language || navigator.userLanguage;
 
   //add counter
-  useEffect(() => {
-    if (handleAddCounter) {
-      fetch("https://countersgo-backend.onrender.com/addcounter", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newCounter }),
-      })
-        .then((data) => data.json())
-        .then((data) => {
-          if (data.id) {
-            setCounters((state) => {
-              return { ...state, [newCounter]: 0 };
-            });
-          }
-        });
-      setNewCounter("");
-      handleAddCounter.preventDefault();
-      Session();
-    }
-    //eslint-disable-next-line
-  }, [handleAddCounter]);
+  function handleAddCounter(e) {
+    fetch("https://countersgo-backend.onrender.com/addcounter", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newCounter }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.id) {
+          setCounters((state) => {
+            return { ...state, [newCounter]: 0 };
+          });
+        }
+      });
+    setNewCounter("");
+    e.preventDefault();
+    Session();
+  }
 
+  //get counters
   useEffect(() => {
     setCounters({});
-    fetch("https://countersgo-backend.onrender.com/getcounters", {mode: "no-cors"})
+    fetch("https://countersgo-backend.onrender.com/getcounters", {
+      mode: "cors",
+      credentials: "include"
+    })
       .then((data) => data.json())
       .then((data) =>
         data.open === "false" ? setCounters({}) : setCounters(data)
@@ -60,7 +61,7 @@ function Dashboard() {
     <dir className="p-0 m-0">
       <header>
         <h2 className="text-2xl font-bold mt-2">
-          {token.open === "true" ? token.message : ""}
+          {auth.open === "true" ? auth.message : ""}
         </h2>
         <p className="text-xl font-medium">
           {userLang === "es-ES" ? "Panel" : "Dashboard"}
@@ -68,7 +69,7 @@ function Dashboard() {
       </header>
 
       <div>
-        <form onSubmit={(e) => setHandleAddCounter(e)}>
+        <form onSubmit={handleAddCounter}>
           <input
             className="w-52 px-2 rounded-xl"
             maxLength={12}
@@ -79,7 +80,7 @@ function Dashboard() {
             onChange={(e) => setNewCounter(e.currentTarget.value)}
           ></input>
           <button
-            className="bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2 mx-2"
+            className="mt-1 bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2 mx-2"
             type="submit"
           >
             {userLang === "es-ES" ? "Añadir contador" : "Add counter"}

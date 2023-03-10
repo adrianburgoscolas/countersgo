@@ -2,12 +2,14 @@ import { Outlet, Link } from "react-router-dom";
 import useAuth from "../../CustomHooks/useAuth";
 
 function Layout() {
-  const { token, Logout } = useAuth();
+  const { auth, Session, Logout } = useAuth();
   const userLang = navigator.language || navigator.userLanguage;
+
+  Session();
 
   return (
     <>
-      {token.open === "true" ? (
+      {auth?.open === "true" ? (
         <nav className="bg-stone-400 sticky top-0 py-3 flex justify-center font-medium">
           <Link
             to="/dashboard"

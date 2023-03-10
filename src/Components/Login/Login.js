@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAuth from "../../CustomHooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -7,20 +7,14 @@ function Login() {
   const [pass, setPass] = useState("");
   const [checkpass, setCheckPass] = useState("");
   const [register, setRegister] = useState(false);
-  const { token, Register, Login, Session } = useAuth();
+  const { auth, Register, Login } = useAuth();
   const navigate = useNavigate();
 
   const userLang = navigator.language || navigator.userLanguage;
 
-  useEffect(() => {
-    Session();
-    //eslint-disable-next-line
-  }, []);
-
-  if (token.open === "true") {
+  if (auth?.open === "true") {
     navigate("/dashboard");
   }
-
   async function handleSubmit(e) {
     e.preventDefault();
     if (pass === checkpass || !register) {
@@ -28,6 +22,7 @@ function Login() {
       setUser("");
       setPass("");
       setCheckPass("");
+      navigate("/dashboard");
     }
   }
 
@@ -52,7 +47,7 @@ function Login() {
     </label>
   );
 
-  return (
+  return auth ? (
     <div className="text-center text-stone-800 bg-stone-200">
       <h2 className="text-2xl font-bold flex-1">
         {register ? (
@@ -76,7 +71,7 @@ function Login() {
         )}
       </h2>
       <div className="text-red-800 font-medium">
-        {/user/i.test(token.message) ? token.message : " "}
+        {/user/i.test(auth?.message) ? auth?.message : " "}
       </div>
       <form
         className="w-80 mx-auto my-5 py-5 border-4 border-stone-400 rounded-xl"
@@ -158,7 +153,7 @@ function Login() {
         )}
       </p>
     </div>
-  );
+  ):<div>Loading...</div>;
 }
 
 export default Login;

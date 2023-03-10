@@ -19,7 +19,7 @@ func chain(f http.HandlerFunc, middelwares ...middleware.Middleware) http.Handle
 
 func main() {
 	//root entry point, serving main html page
-	http.HandleFunc("/", chain(routes.HandleRoot, middleware.Method("GET"), middleware.RedirectTLS(), middleware.Logger()))
+	http.HandleFunc("/", chain(routes.HandleRoot, middleware.Method("GET"), middleware.Logger()))
 
 	//serving static files(css, jsvsscript, img)
 	fs := http.FileServer(http.Dir("./build/static"))
@@ -40,6 +40,9 @@ func main() {
 	//API entry points
 	//login
 	http.HandleFunc("/login", chain(routes.HandlerLogin, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))
+
+	//session
+	http.HandleFunc("/session", chain(routes.HandlerSession, middleware.Method("GET"), middleware.Logger(), middleware.Cors()))
 
 	//register
 	http.HandleFunc("/register", chain(routes.HandlerRegister, middleware.Method("POST"), middleware.Logger(), middleware.Cors()))

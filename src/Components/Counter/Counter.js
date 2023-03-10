@@ -1,65 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAuth from "../../CustomHooks/useAuth";
 
 function Counter(prop) {
   const [value, setValue] = useState(prop.counterValue);
   const name = prop.counterName;
-  const [counterHandler, setCounterHandler] = useState();
-  const [delCounterHandler, setDelCounterHandler] = useState();
   const { Session } = useAuth();
   const userLang = navigator.language || navigator.userLanguage;
 
-  useEffect(() => {
-    if (counterHandler) {
-      fetch("https://countersgo-backend.onrender.com/setcounter", {
-        method: "POST",
-      mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, value }),
-      })
-        .then((data) => data.json())
-        .then((data) => data.id);
-      counterHandler.preventDefault();
-    }
+  function counterHandler(value) {
+    fetch("https://countersgo-backend.onrender.com/setcounter", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, value: Number(value) }),
+    })
+      .then((data) => data.json())
+      .then((data) => data.id);
     Session();
-    //eslint-disable-next-line
-  }, [counterHandler]);
+  }
 
-  //del counter
-  useEffect(() => {
-    if (delCounterHandler) {
-      fetch("https://countersgo-backend.onrender.com/delcounter", {
-        method: "POST",
-      mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, value: "0" }),
-      })
-        .then((data) => data.json())
-        .then(() => {
-          prop.setReload((state) => !state);
-        });
-    }
-    //eslint-disable-next-line
-  }, [delCounterHandler]);
+  function delCounterHandler() {
+    fetch("https://countersgo-backend.onrender.com/delcounter", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, value: 0 }),
+    })
+      .then((data) => data.json())
+      .then(() => {
+        prop.setReload((state) => !state);
+      });
+    Session();
+  }
 
   return (
     <li className={`flex mt-2 px-2`}>
       <div className={"mx-1 flex-1 text-left px-2 rounded-xl bg-stone-300"}>
         {name}
       </div>
-      <form className="mx-1 flex-none" onChange={(e) => setCounterHandler(e)}>
+      <form className="m-0 flex-none" >
         <input
           className="w-20 rounded-xl px-2 text-left"
           min={0}
           max={10000}
           type="number"
           value={value <= 10000 ? value : 10000}
-          onChange={(e) => setValue(e.currentTarget.value)}
+          onChange={(e) => {
+              counterHandler(e.currentTarget.value);
+              setValue(e.currentTarget.value);
+              e.preventDefault();
+          }}
         ></input>
       </form>
       <button
         className="mx-1 flex-none bg-stone-400 hover:bg-stone-300 transition-all rounded-xl px-2"
-        onClick={(e) => setDelCounterHandler(e)}
+        onClick={delCounterHandler}
       >
         {userLang === "es-ES" ? "Borrar" : "Del"}
       </button>
