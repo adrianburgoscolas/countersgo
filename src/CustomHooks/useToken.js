@@ -2,6 +2,7 @@ function useToken() {
   return async function (user = "", password = "") {
     return fetch("https://countersgo-backend.onrender.com/login", {
       method: "POST",
+        mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
